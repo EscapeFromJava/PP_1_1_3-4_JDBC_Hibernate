@@ -1,7 +1,22 @@
 package jm.task.core.jdbc;
 
+import jm.task.core.jdbc.service.UserService;
+import jm.task.core.jdbc.service.UserServiceImpl;
+
+import java.sql.SQLException;
+
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         // реализуйте алгоритм здесь
+        UserService userService = new UserServiceImpl();
+        userService.createUsersTable();
+        userService.saveUser("Aleksey", "Petrov", (byte) 30);
+        userService.saveUser("Elena", "Ivanova", (byte) 23);
+        userService.saveUser("Marina", "Egorova", (byte) 33);
+        userService.saveUser("Evgeniy", "Smirnov", (byte) 41);
+        userService.getAllUsers().forEach(System.out::println);
+        userService.cleanUsersTable();
+        userService.dropUsersTable();
+
     }
 }
