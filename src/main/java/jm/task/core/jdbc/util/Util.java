@@ -12,7 +12,7 @@ public class Util {
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(URL, USER_NAME, USER_PASSWORD);
-            System.out.println("Connected!");
+            connection.setAutoCommit(false);
         } catch (SQLException e) {
             System.out.println("Connection error: " + e.getMessage());
         }
