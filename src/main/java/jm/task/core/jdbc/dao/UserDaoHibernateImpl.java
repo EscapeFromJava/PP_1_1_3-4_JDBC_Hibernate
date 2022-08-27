@@ -86,7 +86,14 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public User getUserById(long id) {
         try (Session session = sessionFactory.openSession()) {
-            return (User) session.createQuery("FROM User WHERE id = :id").setParameter("id", id).uniqueResult();
+            return session.createQuery("FROM User WHERE id = :id", User.class).setParameter("id", id).uniqueResult();
+        }
+    }
+
+    @Override
+    public List<User> getUsersByAgeInterval(Byte min, Byte max) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("FROM User WHERE age >= :min AND age <= :max", User.class).setParameter("min", min).setParameter("max", max).getResultList();
         }
     }
 }

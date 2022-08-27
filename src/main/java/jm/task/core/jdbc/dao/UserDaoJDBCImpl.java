@@ -100,9 +100,14 @@ public class UserDaoJDBCImpl implements UserDao {
             System.out.println("Request error: " + e.getMessage());
         }
     }
-//todo
+//todo~
     @Override
     public User getUserById(long id) {
+        return null;
+    }
+
+    @Override
+    public List<User> getUsersByAgeInterval(Byte min, Byte max) {
         return null;
     }
 }

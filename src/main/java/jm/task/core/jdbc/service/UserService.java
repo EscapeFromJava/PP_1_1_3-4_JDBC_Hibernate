@@ -18,4 +18,6 @@ public interface UserService {
     void cleanUsersTable();
 
     User getUserById(long id);
+
+    List<User> getUsersByAgeInterval(Byte min, Byte max);
 }
