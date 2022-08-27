@@ -4,7 +4,9 @@ import jm.task.core.jdbc.model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.NativeQuery;
+import org.hibernate.query.Query;
 
+import javax.persistence.criteria.CriteriaDelete;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
@@ -40,7 +42,7 @@ public class UserDaoHibernateImpl implements UserDao {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             NativeQuery query = session.createSQLQuery("DROP TABLE IF EXISTS `users`");
-            query.executeUpdate();
+            int i = query.executeUpdate();
             session.getTransaction().commit();
         }
     }

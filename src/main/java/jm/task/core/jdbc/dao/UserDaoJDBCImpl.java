@@ -15,7 +15,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void createUsersTable() {
         try (Statement statement = connection.createStatement()) {
-            statement.execute("CREATE TABLE IF NOT EXISTS `users` (" +
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS `users` (" +
                     "`id` BIGINT NOT NULL AUTO_INCREMENT," +
                     "`name` VARCHAR(45) NULL," +
                     "`last_name` VARCHAR(45) NULL," +
@@ -29,25 +29,46 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void dropUsersTable() {
         try (Statement statement = connection.createStatement()) {
-            statement.execute("DROP TABLE IF EXISTS `users`");
+            statement.executeUpdate("DROP TABLE IF EXISTS `users`");
         } catch (SQLException e) {
             System.out.println("Request error: " + e.getMessage());
         }
     }
 
+//    public void saveUser(String name, String lastName, byte age) {
+//        try (Statement statement = connection.createStatement()) {
+//            statement.executeUpdate("INSERT INTO `users` (`name`, `last_name`, `age`) VALUES ('" + name + "', '" + lastName + "', '" + age + "');");
+//            connection.commit();
+//            System.out.println("User с именем " + name + " добавлен в базу данных");
+//        } catch (SQLException e) {
+//            System.out.println("Request error: " + e.getMessage());
+//        }
+//    }
+
     public void saveUser(String name, String lastName, byte age) {
-        try (Statement statement = connection.createStatement()) {
-            statement.execute("INSERT INTO `users` (`name`, `last_name`, `age`) VALUES ('" + name + "', '" + lastName + "', '" + age + "');");
+        PreparedStatement statement = null;
+        try {
+            statement = connection.prepareStatement("INSERT INTO `users` (`name`, `last_name`, `age`) VALUES (?,?,?);");
+            statement.setString(1, name);
+            statement.setString(2, lastName);
+            statement.setByte(3, age);
+            statement.executeUpdate();
             connection.commit();
             System.out.println("User с именем " + name + " добавлен в базу данных");
         } catch (SQLException e) {
-            System.out.println("Request error: " + e.getMessage());
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
     public void removeUserById(long id) {
         try (Statement statement = connection.createStatement()) {
-            statement.execute("DELETE FROM `users` WHERE (`id` = '" + id + "');");
+            statement.executeUpdate("DELETE FROM `users` WHERE (`id` = '" + id + "');");
             connection.commit();
         } catch (SQLException e) {
             System.out.println("Request error: " + e.getMessage());
