@@ -25,14 +25,14 @@ public class UserDaoHibernateImpl implements UserDao {
     public void createUsersTable() {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            NativeQuery query = session.createSQLQuery("CREATE TABLE IF NOT EXISTS `users` (" +
-                    "`id` BIGINT NOT NULL AUTO_INCREMENT," +
-                    "`name` VARCHAR(45) NULL," +
-                    "`last_name` VARCHAR(45) NULL," +
-                    "`age` TINYINT NULL," +
-                    "PRIMARY KEY (`id`)" +
-                    ");");
-            query.executeUpdate();
+            session.createSQLQuery("CREATE TABLE IF NOT EXISTS `users` (" +
+                            "`id` BIGINT NOT NULL AUTO_INCREMENT," +
+                            "`name` VARCHAR(45) NULL," +
+                            "`last_name` VARCHAR(45) NULL," +
+                            "`age` TINYINT NULL," +
+                            "PRIMARY KEY (`id`)" +
+                            ");")
+                    .executeUpdate();
             session.getTransaction().commit();
         }
     }
@@ -41,8 +41,7 @@ public class UserDaoHibernateImpl implements UserDao {
     public void dropUsersTable() {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            NativeQuery query = session.createSQLQuery("DROP TABLE IF EXISTS `users`");
-            int i = query.executeUpdate();
+            session.createSQLQuery("DROP TABLE IF EXISTS `users`").executeUpdate();
             session.getTransaction().commit();
         }
     }
@@ -77,8 +76,7 @@ public class UserDaoHibernateImpl implements UserDao {
     public void cleanUsersTable() {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            NativeQuery query = session.createSQLQuery("TRUNCATE `users`;");
-            query.executeUpdate();
+            session.createSQLQuery("TRUNCATE `users`;").executeUpdate();
             session.getTransaction().commit();
         }
     }
@@ -86,14 +84,31 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public User getUserById(long id) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("FROM User WHERE id = :id", User.class).setParameter("id", id).uniqueResult();
+            return session.createQuery("FROM User WHERE id = :id", User.class)
+                    .setParameter("id", id)
+                    .uniqueResult();
         }
     }
 
     @Override
     public List<User> getUsersByAgeInterval(Byte min, Byte max) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("FROM User WHERE age >= :min AND age <= :max", User.class).setParameter("min", min).setParameter("max", max).getResultList();
+            return session.createQuery("FROM User WHERE age >= :min AND age <= :max", User.class)
+                    .setParameter("min", min)
+                    .setParameter("max", max)
+                    .getResultList();
+        }
+    }
+
+    @Override
+    public void updateUserName(long id, String name) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.createQuery("UPDATE User SET name = :name WHERE id = :id")
+                    .setParameter("name", name)
+                    .setParameter("id", id)
+                    .executeUpdate();
+            session.getTransaction().commit();
         }
     }
 }

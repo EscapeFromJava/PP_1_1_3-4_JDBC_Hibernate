@@ -20,4 +20,6 @@ public interface UserDao {
     User getUserById(long id);
 
     List<User> getUsersByAgeInterval(Byte min, Byte max);
+
+    void updateUserName(long id, String name);
 }

@@ -42,4 +42,9 @@ public class UserServiceImpl implements UserService {
     public List<User> getUsersByAgeInterval(Byte min, Byte max) {
         return userDaoHibernate.getUsersByAgeInterval(min, max);
     }
+
+    @Override
+    public void updateUserName(long id, String name) {
+        userDaoHibernate.updateUserName(id, name);
+    }
 }

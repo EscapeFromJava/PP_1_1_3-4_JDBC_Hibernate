@@ -15,11 +15,16 @@ public class Main {
         userService.saveUser("Nikolay", "Eremin", (byte) 31);
         userService.saveUser("Elena", "Ivanova", (byte) 23);
         userService.saveUser("Marina", "Egorova", (byte) 33);
-//        userService.removeUserById(3);
-//        userService.getAllUsers().forEach(System.out::println);
+        userService.removeUserById(3);
+        userService.getAllUsers().forEach(System.out::println);
 
 //        System.out.println("get user: " + userService.getUserById(1));
-        userService.getUsersByAgeInterval((byte) 26, (byte) 33).forEach(System.out::println);
+
+//        userService.getUsersByAgeInterval((byte) 26, (byte) 33).forEach(System.out::println);
+
+//        System.out.println(userService.getUserById(3));
+//        userService.updateUserName(3, "Konev");
+//        System.out.println(userService.getUserById(3));
 
         userService.cleanUsersTable();
         userService.dropUsersTable();

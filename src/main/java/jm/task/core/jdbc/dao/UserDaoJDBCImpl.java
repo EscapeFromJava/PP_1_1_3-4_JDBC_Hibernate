@@ -101,13 +101,16 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 //todo~
-    @Override
+
     public User getUserById(long id) {
         return null;
     }
 
-    @Override
     public List<User> getUsersByAgeInterval(Byte min, Byte max) {
         return null;
     }
+
+    public void updateUserName(long id, String name) {
+    }
+
 }
