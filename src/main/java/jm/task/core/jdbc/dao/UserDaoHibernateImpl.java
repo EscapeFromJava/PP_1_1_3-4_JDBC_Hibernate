@@ -82,4 +82,11 @@ public class UserDaoHibernateImpl implements UserDao {
             session.getTransaction().commit();
         }
     }
+
+    @Override
+    public User getUserById(long id) {
+        try (Session session = sessionFactory.openSession()) {
+            return (User) session.createQuery("FROM User WHERE id = :id").setParameter("id", id).uniqueResult();
+        }
+    }
 }

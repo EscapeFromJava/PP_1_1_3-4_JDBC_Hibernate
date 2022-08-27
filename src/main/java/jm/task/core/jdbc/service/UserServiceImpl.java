@@ -32,4 +32,9 @@ public class UserServiceImpl implements UserService {
     public void cleanUsersTable() {
         userDaoHibernate.cleanUsersTable();
     }
+
+    @Override
+    public User getUserById(long id) {
+        return userDaoHibernate.getUserById(id);
+    }
 }

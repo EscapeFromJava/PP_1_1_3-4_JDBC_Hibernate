@@ -100,4 +100,9 @@ public class UserDaoJDBCImpl implements UserDao {
             System.out.println("Request error: " + e.getMessage());
         }
     }
+//todo
+    @Override
+    public User getUserById(long id) {
+        return null;
+    }
 }
