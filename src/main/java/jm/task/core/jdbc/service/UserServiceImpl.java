@@ -7,7 +7,7 @@ import jm.task.core.jdbc.util.Util;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
-    private UserDaoHibernateImpl userDaoHibernate = new UserDaoHibernateImpl(Util.getSessionFactory());
+    private final UserDaoHibernateImpl userDaoHibernate = new UserDaoHibernateImpl(Util.getSessionFactory());
 
     public void createUsersTable() {
         userDaoHibernate.createUsersTable();
@@ -56,5 +56,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getUsersByLastName(String lastName) {
         return userDaoHibernate.getUsersByLastName(lastName);
+    }
+
+    @Override
+    public double getAverageAgeValue() {
+        return userDaoHibernate.getAverageAgeValue();
     }
 }

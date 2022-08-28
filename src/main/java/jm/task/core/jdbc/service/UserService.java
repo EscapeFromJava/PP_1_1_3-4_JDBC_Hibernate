@@ -26,4 +26,6 @@ public interface UserService {
     void generateRandomUsers(int n);
 
     List<User> getUsersByLastName(String lastName);
+
+    double getAverageAgeValue();
 }

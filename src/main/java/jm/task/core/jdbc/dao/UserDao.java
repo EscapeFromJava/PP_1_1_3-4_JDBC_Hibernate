@@ -27,4 +27,6 @@ public interface UserDao {
 
     List<User> getUsersByLastName(String lastName);
 
+    double getAverageAgeValue();
+
 }

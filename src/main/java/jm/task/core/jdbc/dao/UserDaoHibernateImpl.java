@@ -8,6 +8,8 @@ import org.hibernate.query.Query;
 
 import javax.persistence.criteria.CriteriaDelete;
 import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public class UserDaoHibernateImpl implements UserDao {
 
@@ -59,8 +61,7 @@ public class UserDaoHibernateImpl implements UserDao {
     public void removeUserById(long id) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            User deleteUser = session.get(User.class, id);
-            session.remove(deleteUser);
+            session.remove(session.get(User.class, id));
             session.getTransaction().commit();
         }
     }
@@ -84,16 +85,14 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public User getUserById(long id) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("FROM User WHERE id = :id", User.class)
-                    .setParameter("id", id)
-                    .uniqueResult();
+            return session.get(User.class, id);
         }
     }
 
     @Override
     public List<User> getUsersByAgeInterval(Byte min, Byte max) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("FROM User WHERE age >= :min AND age <= :max", User.class)
+            return session.createQuery("FROM User WHERE age BETWEEN :min AND :max", User.class)
                     .setParameter("min", min)
                     .setParameter("max", max)
                     .getResultList();
@@ -116,10 +115,9 @@ public class UserDaoHibernateImpl implements UserDao {
     public void generateRandomUsers(int n) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            for (int i = 0; i < n; i++) {
-                User newUser = User.getRandomUser();
-                session.saveOrUpdate(newUser);
-            }
+            Stream.generate(User::getRandomUser)
+                    .limit(n)
+                    .forEach(session::saveOrUpdate);
             session.getTransaction().commit();
         }
     }
@@ -130,6 +128,13 @@ public class UserDaoHibernateImpl implements UserDao {
             return session.createQuery("FROM User WHERE lastName = :lastName ", User.class)
                     .setParameter("lastName", lastName)
                     .getResultList();
+        }
+    }
+
+    @Override
+    public double getAverageAgeValue() {
+        try (Session session = sessionFactory.openSession()) {
+            return (double) session.createQuery("SELECT AVG(age) FROM User").getSingleResult();
         }
     }
 }
