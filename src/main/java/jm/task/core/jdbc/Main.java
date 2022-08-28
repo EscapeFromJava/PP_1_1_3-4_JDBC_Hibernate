@@ -19,8 +19,8 @@ public class Main {
 //        userService.saveUser("Nikolay", "Eremin", (byte) 31);
 //        userService.saveUser("Elena", "Ivanova", (byte) 23);
 //        userService.saveUser("Marina", "Egorova", (byte) 33);
-        userService.generateRandomUsers(20);
-        System.out.println(userService.getAverageAgeValue());
+        userService.generateRandomUsers(10);
+//        System.out.println(userService.getAverageAgeValue());
 //        userService.getAllUsers().forEach(System.out::println);
 //        userService.removeUserById(3);
 //        System.out.println("всего " + userService.getAllUsers().size());
@@ -35,11 +35,11 @@ public class Main {
 
 //        userService.getUsersByAgeInterval((byte) 26, (byte) 36).forEach(System.out::println);
 
-//        System.out.println(userService.getUserById(33));
-//        userService.updateUserName(33, "Anatoliy");
-//        System.out.println(userService.getUserById(33));
+        System.out.println(userService.getUserById(3));
+        userService.updateUserName(3, "Anatoliy");
+        System.out.println(userService.getUserById(3));
 
-//        userService.cleanUsersTable();
-//        userService.dropUsersTable();
+        userService.cleanUsersTable();
+        userService.dropUsersTable();
     }
 }

@@ -103,10 +103,7 @@ public class UserDaoHibernateImpl implements UserDao {
     public void updateUserName(long id, String name) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.createQuery("UPDATE User SET name = :name WHERE id = :id")
-                    .setParameter("name", name)
-                    .setParameter("id", id)
-                    .executeUpdate();
+            session.get(User.class, id).setName(name);
             session.getTransaction().commit();
         }
     }
