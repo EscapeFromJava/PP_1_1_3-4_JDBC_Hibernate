@@ -22,4 +22,8 @@ public interface UserService {
     List<User> getUsersByAgeInterval(Byte min, Byte max);
 
     void updateUserName(long id, String name);
+
+    void generateRandomUsers(int n);
+
+    List<User> getUsersByLastName(String lastName);
 }

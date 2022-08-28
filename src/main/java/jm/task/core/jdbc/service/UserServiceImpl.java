@@ -47,4 +47,14 @@ public class UserServiceImpl implements UserService {
     public void updateUserName(long id, String name) {
         userDaoHibernate.updateUserName(id, name);
     }
+
+    @Override
+    public void generateRandomUsers(int n) {
+        userDaoHibernate.generateRandomUsers(n);
+    }
+
+    @Override
+    public List<User> getUsersByLastName(String lastName) {
+        return userDaoHibernate.getUsersByLastName(lastName);
+    }
 }

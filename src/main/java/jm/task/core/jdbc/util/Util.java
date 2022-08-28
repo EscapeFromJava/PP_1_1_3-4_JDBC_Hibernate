@@ -40,7 +40,7 @@ public class Util {
             properties.put(Environment.DIALECT, "org.hibernate.dialect.MySQL5Dialect");
             properties.put(Environment.SHOW_SQL, true);
             properties.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
-            properties.put(Environment.HBM2DDL_AUTO, "create-drop");
+            properties.put(Environment.HBM2DDL_AUTO, "update");
 
 //            properties.put(Environment.FORMAT_SQL, true);
 //            properties.put(Environment.USE_SQL_COMMENTS, true);

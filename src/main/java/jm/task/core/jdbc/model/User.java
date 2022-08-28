@@ -2,6 +2,7 @@ package jm.task.core.jdbc.model;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
+import java.util.Random;
 
 @Entity
 @Table(name = "users")
@@ -65,6 +66,22 @@ public class User {
     @Override
     public String toString() {
         return id + " : " + name + " : " + lastName + " : " + age;
+    }
+
+    public static User getRandomUser() {
+        User newUser = new User();
+        newUser.setName(Names.values()[new Random().nextInt(Names.values().length)].name());
+        newUser.setLastName(LastNames.values()[new Random().nextInt(LastNames.values().length)].name());
+        newUser.setAge((byte) new Random().nextInt(18, 50));
+        return newUser;
+    }
+
+    enum Names {
+        Oleg, Irina, Ivan, Elena, Artem, Sergey, Nikolay, Maria, Danil, Stepan, Evgeniy, Aleksandr
+    }
+
+    enum LastNames {
+        Stepanenko, Eremenko, Drozd, Poroh, Temechko, Boroda, Stvol, Topor, Ogonek, Mohovik, Smerenko, Tokhno
     }
 }
 

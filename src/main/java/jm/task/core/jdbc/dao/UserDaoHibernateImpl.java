@@ -111,4 +111,25 @@ public class UserDaoHibernateImpl implements UserDao {
             session.getTransaction().commit();
         }
     }
+
+    @Override
+    public void generateRandomUsers(int n) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            for (int i = 0; i < n; i++) {
+                User newUser = User.getRandomUser();
+                session.saveOrUpdate(newUser);
+            }
+            session.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public List<User> getUsersByLastName(String lastName) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("FROM User WHERE lastName = :lastName ", User.class)
+                    .setParameter("lastName", lastName)
+                    .getResultList();
+        }
+    }
 }
