@@ -1,12 +1,17 @@
 package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -83,9 +88,35 @@ public class UserDaoHibernateImpl implements UserDao {
     }
 
     @Override
+    public void generateRandomUsers(int n) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            Stream.generate(User::getRandomUser)
+                    .limit(n)
+                    .forEach(session::saveOrUpdate);
+            session.getTransaction().commit();
+        }
+    }
+
+    @Override
     public User getUserById(long id) {
         try (Session session = sessionFactory.openSession()) {
             return session.get(User.class, id);
+        }
+    }
+
+    @Override
+    public List<User> getUsersByLastName(String lastName) {
+        try (Session session = sessionFactory.openSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+            Root<User> root = criteriaQuery.from(User.class);
+            criteriaQuery.where(criteriaBuilder.equal(root.get("lastName"), lastName))
+                    .getOrderList();
+            return session.createQuery(criteriaQuery).getResultList();
+//            return session.createQuery("FROM User WHERE lastName = :lastName ", User.class)
+//                    .setParameter("lastName", lastName)
+//                    .getResultList();
         }
     }
 
@@ -100,38 +131,18 @@ public class UserDaoHibernateImpl implements UserDao {
     }
 
     @Override
+    public double getAverageAgeValue() {
+        try (Session session = sessionFactory.openSession()) {
+            return (double) session.createQuery("SELECT AVG(age) FROM User").getSingleResult();
+        }
+    }
+
+    @Override
     public void updateUserName(long id, String name) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.get(User.class, id).setName(name);
             session.getTransaction().commit();
-        }
-    }
-
-    @Override
-    public void generateRandomUsers(int n) {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            Stream.generate(User::getRandomUser)
-                    .limit(n)
-                    .forEach(session::saveOrUpdate);
-            session.getTransaction().commit();
-        }
-    }
-
-    @Override
-    public List<User> getUsersByLastName(String lastName) {
-        try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("FROM User WHERE lastName = :lastName ", User.class)
-                    .setParameter("lastName", lastName)
-                    .getResultList();
-        }
-    }
-
-    @Override
-    public double getAverageAgeValue() {
-        try (Session session = sessionFactory.openSession()) {
-            return (double) session.createQuery("SELECT AVG(age) FROM User").getSingleResult();
         }
     }
 }

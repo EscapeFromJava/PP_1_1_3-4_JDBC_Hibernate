@@ -19,15 +19,15 @@ public class Main {
 //        userService.saveUser("Nikolay", "Eremin", (byte) 31);
 //        userService.saveUser("Elena", "Ivanova", (byte) 23);
 //        userService.saveUser("Marina", "Egorova", (byte) 33);
-        userService.generateRandomUsers(10);
+        userService.generateRandomUsers(30);
 //        System.out.println(userService.getAverageAgeValue());
 //        userService.getAllUsers().forEach(System.out::println);
 //        userService.removeUserById(3);
 //        System.out.println("всего " + userService.getAllUsers().size());
 
-//        String lastName = "Boroda";
-//        List<User> users = userService.getUsersByLastName(lastName);
-//        System.out.println("Количество пользователей с фамилией " + lastName + " = " + users.size());
+        String lastName = "Boroda";
+        List<User> users = userService.getUsersByLastName(lastName);
+        System.out.println("Количество пользователей с фамилией " + lastName + " = " + users.size());
 //        users.forEach(System.out::println);
 
 
@@ -35,9 +35,9 @@ public class Main {
 
 //        userService.getUsersByAgeInterval((byte) 26, (byte) 36).forEach(System.out::println);
 
-        System.out.println(userService.getUserById(3));
-        userService.updateUserName(3, "Anatoliy");
-        System.out.println(userService.getUserById(3));
+//        System.out.println(userService.getUserById(3));
+//        userService.updateUserName(3, "Anatoliy");
+//        System.out.println(userService.getUserById(3));
 
         userService.cleanUsersTable();
         userService.dropUsersTable();
