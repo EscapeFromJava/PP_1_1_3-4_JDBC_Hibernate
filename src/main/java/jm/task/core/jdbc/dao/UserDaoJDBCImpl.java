@@ -30,7 +30,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 "`age` TINYINT NULL," +
                 "PRIMARY KEY (`id`)" +
                 ");")) {
-            statement.executeUpdate();
+            statement.execute();
         } catch (SQLException e) {
             System.out.println("Request error: " + e.getMessage());
         }
@@ -41,7 +41,7 @@ public class UserDaoJDBCImpl implements UserDao {
 //            statement.execute("DROP TABLE IF EXISTS `users`");
 
         try (PreparedStatement statement = connection.prepareStatement("DROP TABLE IF EXISTS `users`")) {
-            statement.executeUpdate();
+            statement.execute();
         } catch (SQLException e) {
             System.out.println("Request error: " + e.getMessage());
         }
@@ -102,7 +102,7 @@ public class UserDaoJDBCImpl implements UserDao {
 //            statement.execute("TRUNCATE `users`;");
 
         try (PreparedStatement statement = connection.prepareStatement("TRUNCATE `users`;")) {
-            statement.executeUpdate();
+            statement.execute();
         } catch (SQLException e) {
             System.out.println("Request error: " + e.getMessage());
         }
