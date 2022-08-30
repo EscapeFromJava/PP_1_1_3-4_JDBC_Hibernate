@@ -8,48 +8,38 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 
 public class Util {
     // реализуйте настройку соеденения с БД
-    private static final String MY_URL = "jdbc:mysql://localhost:3306/my_db";
-    private static final String USER_NAME = "bestuser";
-    private static final String USER_PASSWORD = "bestuser";
-
-    public static Connection getConnection() {
-        Connection connection = null;
-        try {
-            connection = DriverManager.getConnection(MY_URL, USER_NAME, USER_PASSWORD);
-            connection.setAutoCommit(false);
-        } catch (SQLException e) {
-            System.out.println("Connection error: " + e.getMessage());
-        }
-        return connection;
-    }
 
     public static SessionFactory getSessionFactory() {
         SessionFactory sessionFactory = null;
         try {
+            FileReader fileReader = new FileReader("src/main/resources/database.properties");
+            Properties dataBaseProperties = new Properties();
+            dataBaseProperties.load(fileReader);
+
             Configuration configuration = new Configuration();
             Properties properties = new Properties();
-            properties.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
-            properties.put(Environment.URL, MY_URL);
-            properties.put(Environment.USER, USER_NAME);
-            properties.put(Environment.PASS, USER_PASSWORD);
-            properties.put(Environment.DIALECT, "org.hibernate.dialect.MySQL5Dialect");
+
+            properties.put(Environment.DRIVER, dataBaseProperties.getProperty("driver"));
+            properties.put(Environment.URL, dataBaseProperties.getProperty("url"));
+            properties.put(Environment.USER, dataBaseProperties.getProperty("username"));
+            properties.put(Environment.PASS, dataBaseProperties.getProperty("password"));
+            properties.put(Environment.DIALECT, dataBaseProperties.getProperty("dialect"));
             properties.put(Environment.SHOW_SQL, true);
             properties.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
             properties.put(Environment.HBM2DDL_AUTO, "update");
-
-//            properties.put(Environment.FORMAT_SQL, true);
-//            properties.put(Environment.USE_SQL_COMMENTS, true);
-
             configuration.setProperties(properties);
             configuration.addAnnotatedClass(User.class);
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
             sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-        } catch (HibernateException e) {
+        } catch (HibernateException | IOException e) {
             throw new RuntimeException(e);
         }
         return sessionFactory;
