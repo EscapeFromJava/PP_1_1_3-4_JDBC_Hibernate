@@ -108,33 +108,19 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public List<User> getUsersByLastName(String lastName) {
         try (Session session = sessionFactory.openSession()) {
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
-            Root<User> root = criteriaQuery.from(User.class);
-            criteriaQuery.where(criteriaBuilder.equal(root.get("lastName"), lastName))
-                    .getOrderList();
-            return session.createQuery(criteriaQuery).getResultList();
-
-//            return session.createQuery("FROM User WHERE lastName = :lastName ", User.class)
-//                    .setParameter("lastName", lastName)
-//                    .getResultList();
+            return session.createQuery("FROM User WHERE lastName = :lastName ", User.class)
+                    .setParameter("lastName", lastName)
+                    .getResultList();
         }
     }
 
     @Override
     public List<User> getUsersByAgeInterval(Byte min, Byte max) {
         try (Session session = sessionFactory.openSession()) {
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
-            Root<User> root = criteriaQuery.from(User.class);
-            criteriaQuery.where(criteriaBuilder.between(root.get("age"), min, max))
-                    .getOrderList();
-            return session.createQuery(criteriaQuery).getResultList();
-
-//            return session.createQuery("FROM User WHERE age BETWEEN :min AND :max", User.class)
-//                    .setParameter("min", min)
-//                    .setParameter("max", max)
-//                    .getResultList();
+            return session.createQuery("FROM User WHERE age BETWEEN :min AND :max", User.class)
+                    .setParameter("min", min)
+                    .setParameter("max", max)
+                    .getResultList();
         }
     }
 
